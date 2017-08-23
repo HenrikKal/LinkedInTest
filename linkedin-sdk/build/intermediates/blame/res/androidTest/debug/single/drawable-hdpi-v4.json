@@ -2,5 +2,9 @@
     {
         "merged": "C:\\Users\\Henrik\\AndroidStudioProjects\\LinkedInTest\\linkedin-sdk\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-hdpi-v4\\ic_launcher.png",
         "source": "C:\\Users\\Henrik\\AndroidStudioProjects\\LinkedInTest\\linkedin-sdk\\build\\intermediates\\bundles\\debug\\res\\drawable-hdpi-v4\\ic_launcher.png"
+    },
+    {
+        "merged": "C:\\Users\\Henrik\\Documents\\Github\\LinkedInTest\\linkedin-sdk\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-hdpi-v4\\ic_launcher.png",
+        "source": "C:\\Users\\Henrik\\Documents\\Github\\LinkedInTest\\linkedin-sdk\\build\\intermediates\\bundles\\debug\\res\\drawable-hdpi-v4\\ic_launcher.png"
     }
 ]
