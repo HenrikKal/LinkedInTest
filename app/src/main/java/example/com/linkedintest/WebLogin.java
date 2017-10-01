@@ -19,13 +19,14 @@ import static com.android.volley.VolleyLog.TAG;
 public class WebLogin {
 
     private final static String LINKEDIN_AUTH_URL = "https://www.linkedin.com/oauth/v2/authorization";
-    private final static String ACCESS_TOKEN_URL = "https://www.linkedin.com/uas/oauth2/accessToken";
+    private final static String ACCESS_TOKEN_URL = "https://www.linkedin.com/oauth/v2/accessToken";
     private final static String SCOPE = "scope=r_basicprofile";
+
 
 
     private static String client_id = "78r44ids5rjt42";
     private static String redirect_uri = "https://ais.armada.nu/api/student_profile/matching";
-
+    private static String formatted_redirect_uri = "https%3A%2F%2Fais.armada.nu%2Fapi%2Fstudent_profile%2Fmatching";
 
     public WebLogin(){
 
@@ -40,7 +41,7 @@ public class WebLogin {
 
     public static String getLinkedinAuthUrl(){
 
-        return LINKEDIN_AUTH_URL+"?response_type=code&client_id="+client_id+"&redirect_uri=https%3A%2F%2Fais.armada.nu%2Fapi%2Fstudent_profile%2Fmatching&state=987654321&scope=r_basicprofile";
+        return LINKEDIN_AUTH_URL+"?response_type=code&client_id="+client_id+"&redirect_uri="+formatted_redirect_uri+"&state=987654321&scope=r_basicprofile";
     }
 
     public static String getRedirect_uri(){
@@ -54,7 +55,19 @@ public class WebLogin {
         return "";
     }
 
-    private static void makePostRequest(URL url){
+    public static void makePostRequest(URL url){
+
+
+        new PostAsync(url).execute();
+
+    }
+
+
+    public static String getAccessTokenUrl(String authToken){
+
+        return ACCESS_TOKEN_URL + "?grant_type=authorization_code&code=" + authToken
+                + "&redirect_uri=" + formatted_redirect_uri + "&client_id=" + client_id + "&client_secret=verysecret";
+
 
 
     }
@@ -76,18 +89,21 @@ public class WebLogin {
                 HttpURLConnection client = null;
                 client = (HttpURLConnection) url.openConnection();
 
+
                 client.setRequestMethod("POST");
                 client.setRequestProperty("Key", "Value");
                 client.setDoOutput(true);
 
+
                 OutputStream outputPost = new BufferedOutputStream(client.getOutputStream());
-                byte[] bytes = ("Honka").getBytes();
-                outputPost.write(bytes);
+                //byte[] bytes = ("Honka").getBytes();
+                //outputPost.write(bytes);
 
                 outputPost.flush();
                 outputPost.close();
 
                 int responseCode = client.getResponseCode();
+
 
                 Log.v(TAG, Integer.toString(responseCode));
 

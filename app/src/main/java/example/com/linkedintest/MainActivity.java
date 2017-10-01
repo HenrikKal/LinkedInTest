@@ -62,9 +62,31 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
                     String url = request.getUrl().toString();
+                    Log.d(TAG, "url is =" + url);
+
+                    /*
+                        ais url is not able to handle our requests, so when we try
+                        to retrieve the code down below, it will be null and that'll fuck up
+
+                     */
 
                     if (url.startsWith(WebLogin.getRedirect_uri())) {
                         // webview not load url
+
+                        String accessToken = request.getUrl().getQueryParameter("code");
+
+                        String accessUrlString = WebLogin.getAccessTokenUrl(accessToken);
+                        Log.d(TAG, "accessUrlString: " + accessUrlString);
+
+
+
+                        try {
+                            URL accessUrl = new URL(accessUrlString);
+                            WebLogin.makePostRequest(accessUrl);
+
+                        }
+                        catch (MalformedURLException e){};
+
                     }
                     else {
                         webView.loadUrl(WebLogin.getLinkedinAuthUrl());
@@ -84,7 +106,21 @@ public class MainActivity extends AppCompatActivity {
                         // webview not load url
 
                         Uri uri = Uri.parse(url);
-                        String accessToken = uri.getQueryParameter("response_type");
+
+                        /// get the Code
+                        String accessToken = uri.getQueryParameter("code");
+
+                        String accessUrlString = WebLogin.getAccessTokenUrl(accessToken);
+                        Log.d(TAG, "accessUrlString: " + accessUrlString);
+
+
+
+                        try {
+                            URL accessUrl = new URL(accessUrlString);
+                            WebLogin.makePostRequest(accessUrl);
+
+                        }
+                        catch (MalformedURLException e){};
 
 
                     }
