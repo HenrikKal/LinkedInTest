@@ -150,79 +150,59 @@ public class MainActivity extends AppCompatActivity {
         /*
         final Activity thisActivity = this;
 
-        btnPost = (Button) findViewById(R.id.btn_post);
-        btnPost.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-
-
-
-            try {
-                URL url = new URL("https://ais.armada.nu/api/student_profile/matching");
-                new PostAsync(url).execute();
-
-            }
-            catch (MalformedURLException me){}
-
-            }
-        });
-
        // generateHashkey();
 
-
-        //((Button) findViewById(R.id.btn_login)).setOnClickListener(new View.OnClickListener() {
-
-           // @Override
+        btnLogin = (Button) findViewById(R.id.btn_login);
+        btnLogout = (Button) findViewById(R.id.btn_logout);
 
 
-
-        /* GENERATING A HASH KEY WITH THE generateHashKey() method works when you add it to
+            /* GENERATING A HASH KEY WITH THE generateHashKey() method works when you add it to
             my LinkedIn apps, accessToken will be valid
 
             However, generating a hash key with keytools in cmd doesn't work. You get a hask key
             but it seems like that hash key isn't associated with the app.
+            */
 
-         */
         /*
-        LISessionManager sessionManager = LISessionManager.getInstance(getApplicationContext());
         LISession session = sessionManager.getSession();
         boolean accessTokenValid = session.isValid();
 
-        if (!accessTokenValid) {
 
-            LISessionManager.getInstance(getApplicationContext()).init(thisActivity, buildScope(), new AuthListener() {
-                @Override
-                public void onAuthSuccess() {
+        if (accessTokenValid){
 
+        btnLogin.setOnClickListener(new View.OnClickListener() {
 
-                }
+            @Override
+            public void onClick(View view) {
 
-                @Override
-                public void onAuthError(LIAuthError error) {
+                LISessionManager.getInstance(getApplicationContext()).init(thisActivity, buildScope(), new AuthListener() {
+                    @Override
+                    public void onAuthSuccess() {
+                        getBasicProfile();
+                    }
 
-                }
-            }, true);
+                    @Override
+                    public void onAuthError(LIAuthError error) {}
 
-        }
+                }, true);
 
-           // }
-        //});
+                btnLogin.setVisibility(View.GONE);
+                btnLogout.setVisibility(View.VISIBLE);
+            }
 
+        });
 
-        APIHelper apiHelper = APIHelper.getInstance(getApplicationContext());
-                apiHelper.getRequest(MainActivity.this, topCardUrl, new ApiListener() {
-                    public void onApiSuccess(ApiResponse result) {
-                        try {
-              Log.v("result",result.getResponseDataAsJson().toString());
-                        } catch (Exception e){
-                                e.printStackTrace();
-                        }
-              }
-               @Override
-                    public void onApiError(LIApiError error) {
-                }
-                });
+        btnLogout.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                sessionManager.clearSession();
+                btnLogout.setVisibility(View.GONE);
+                btnLogin.setVisibility(View.VISIBLE);
+            }
+
+        });
+
 
         */
         //Intent intent = new Intent(this, LoginActivity.class);
@@ -249,6 +229,28 @@ public class MainActivity extends AppCompatActivity {
             Log.d(TAG, e.getMessage(), e);
         }
 
+
+    }
+
+    private void getBasicProfile(){
+
+        APIHelper apiHelper = APIHelper.getInstance(getApplicationContext());
+
+        apiHelper.getRequest(MainActivity.this, topCardUrl, new ApiListener() {
+
+            public void onApiSuccess(ApiResponse result) {
+                try {
+                    Log.v(TAG, result.getResponseDataAsJson().toString());
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onApiError(LIApiError error) {
+            }
+
+        });
 
     }
 
