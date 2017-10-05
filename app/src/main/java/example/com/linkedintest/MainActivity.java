@@ -76,20 +76,24 @@ public class MainActivity extends AppCompatActivity {
                         String accessToken = request.getUrl().getQueryParameter("code");
 
                         String accessUrlString = WebLogin.getAccessTokenUrl(accessToken);
+                        String accessData = WebLogin.getAccessTokenData(accessToken);
                         Log.d(TAG, "accessUrlString: " + accessUrlString);
 
+                        WebLogin.makePostRequest(accessUrlString, accessData);
 
+                        /*
 
                         try {
                             URL accessUrl = new URL(accessUrlString);
-                            WebLogin.makePostRequest(accessUrl);
+                            WebLogin.makePostRequest(accessUrl, accessData);
 
                         }
-                        catch (MalformedURLException e){};
+                        catch (MalformedURLException e){Log.d(TAG, "Malformed accessUurl");};
+                        */
 
                     }
                     else {
-                        webView.loadUrl(WebLogin.getLinkedinAuthUrl());
+                        //webView.loadUrl(WebLogin.getLinkedinAuthUrl());
                         return false;
                     }
 
@@ -114,18 +118,21 @@ public class MainActivity extends AppCompatActivity {
                         Log.d(TAG, "accessUrlString: " + accessUrlString);
 
 
+                        String accessData = WebLogin.getAccessTokenData(accessToken);
+                        WebLogin.makePostRequest(accessUrlString, accessData);
 
+                        /*
                         try {
                             URL accessUrl = new URL(accessUrlString);
                             WebLogin.makePostRequest(accessUrl);
 
                         }
-                        catch (MalformedURLException e){};
-
+                        catch (MalformedURLException e){Log.d(TAG, "Malformed accessUurl");};
+*/
 
                     }
                     else{
-                        webView.loadUrl(WebLogin.getLinkedinAuthUrl());
+                        //webView.loadUrl(WebLogin.getLinkedinAuthUrl());
                         return false;
                     }
 

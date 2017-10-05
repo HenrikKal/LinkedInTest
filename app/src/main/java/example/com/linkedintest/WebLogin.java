@@ -18,15 +18,20 @@ import static com.android.volley.VolleyLog.TAG;
 
 public class WebLogin {
 
+    private final static String TAG = WebLogin.class.getSimpleName();
+
     private final static String LINKEDIN_AUTH_URL = "https://www.linkedin.com/oauth/v2/authorization";
     private final static String ACCESS_TOKEN_URL = "https://www.linkedin.com/oauth/v2/accessToken";
     private final static String SCOPE = "scope=r_basicprofile";
 
 
 
+
     private static String client_id = "78r44ids5rjt42";
-    private static String redirect_uri = "https://ais.armada.nu/api/student_profile/matching";
-    private static String formatted_redirect_uri = "https%3A%2F%2Fais.armada.nu%2Fapi%2Fstudent_profile%2Fmatching";
+
+    // This is a fake URL, it doesn't have to be real
+    private static String redirect_uri = "https://nu.armada.linkedin/oauth";
+    private static String formatted_redirect_uri = "https%3A%2F%2Fnu.armada.linkedin%2Foauth";
 
     public WebLogin(){
 
@@ -55,49 +60,64 @@ public class WebLogin {
         return "";
     }
 
-    public static void makePostRequest(URL url){
+    public static void makePostRequest(String url, String data){
 
-
-        new PostAsync(url).execute();
+        Log.d(TAG, "makePostRequest()");
+        new PostAsyncTask().execute(url, data);
 
     }
 
 
     public static String getAccessTokenUrl(String authToken){
 
+        /*
         return ACCESS_TOKEN_URL + "?grant_type=authorization_code&code=" + authToken
                 + "&redirect_uri=" + formatted_redirect_uri + "&client_id=" + client_id + "&client_secret=verysecret";
+                */
+
+        return ACCESS_TOKEN_URL;
 
 
+
+
+    }
+
+    public static String getAccessTokenData(String authToken){
+        return "grant_type=authorization_code&code=" + authToken
+                + "&redirect_uri=" + formatted_redirect_uri + "&client_id=" + client_id + "&client_secret=verysecret";
 
     }
 
 
 
 
-    private class PostAsyncTask extends AsyncTask<URL, Void, Void>{
+    private static class PostAsyncTask extends AsyncTask<String, Void, Void>{
+
 
 
         @Override
-        protected Void doInBackground(URL... params) {
+        protected Void doInBackground(String... params) {
 
 
-            URL url = params[0];
+            Log.d(TAG, "doInBackground POST");
+
 
             try {
+
+                URL url = new URL(params[0]);
+                String data = params[1];
 
                 HttpURLConnection client = null;
                 client = (HttpURLConnection) url.openConnection();
 
 
                 client.setRequestMethod("POST");
-                client.setRequestProperty("Key", "Value");
                 client.setDoOutput(true);
 
 
                 OutputStream outputPost = new BufferedOutputStream(client.getOutputStream());
-                //byte[] bytes = ("Honka").getBytes();
-                //outputPost.write(bytes);
+                byte[] bytes = data.getBytes();
+                outputPost.write(bytes);
 
                 outputPost.flush();
                 outputPost.close();
@@ -105,11 +125,11 @@ public class WebLogin {
                 int responseCode = client.getResponseCode();
 
 
-                Log.v(TAG, Integer.toString(responseCode));
+                Log.d(TAG, Integer.toString(responseCode));
 
             }
-            catch (MalformedURLException me){}
-            catch (IOException io){}
+            catch (MalformedURLException me){Log.d(TAG, "Malformed URL WebLogin");}
+            catch (IOException io){Log.d(TAG, "IO exception WebLogin");}
 
             return null;
         }
